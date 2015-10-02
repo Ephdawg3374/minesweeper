@@ -5,6 +5,10 @@ class Game
     @board = board
   end
 
+  def revealed_or_flagged?(pos)
+    @board[pos].revealed? || @board[pos].flagged?
+  end
+
   def play
     until game_over?
       board.render
@@ -17,25 +21,36 @@ class Game
         break if valid_user_input?(user_input)
       end
 
+      r_or_f = user_input[0]
+
       pos = parse(user_input)
-      p pos
-      if board[pos].value == :b
-        board.render_loser
-        puts "game over son"
-        return
+
+      if revealed_or_flagged?(pos) && r_or_f == "r"
+          puts "#{pos} is already revealed or flagged on the board! Try again"
+          play
+      end
+
+      if r_or_f == "r"
+        if board[pos].value == :b
+          board.render_loser
+          puts "game over son"
+          return
+        else
+          board[pos].reveal
+          #board.render
+        end
       else
-        board[pos].reveal
-        #board.render
+        board[pos].flag
       end
     end
   end
 
   def valid_user_input?(user_input)
-    !(user_input =~ /\d+,\s*\d+/).nil?
+    !(user_input =~ /^[rf]\s*\d+,\s*\d+/).nil?
   end
 
   def parse(user_input)
-    user_input.split(',').map(&:to_i)
+    user_input[1..-1].split(',').map(&:to_i)
   end
 
   def game_over?

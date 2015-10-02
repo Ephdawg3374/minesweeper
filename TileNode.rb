@@ -22,6 +22,7 @@ class TileNode
   end
 
   def display
+    return "f" if self.flagged
     return value unless value == :b
     " "
   end
@@ -49,7 +50,7 @@ class TileNode
   end
 
   def flag
-    flagged == true ? flagged = false : flagged = true
+    flagged == true ? @flagged = false : @flagged = true
   end
 
   def flagged?
