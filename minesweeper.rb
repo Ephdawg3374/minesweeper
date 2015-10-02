@@ -5,10 +5,10 @@ class Board
 
   BOARD_SIZE = 9
 
-  def initialize(grid = Array.new(9) {Array.new(9)}, difficulty = "normal")
+  def initialize(grid = Array.new(9) {Array.new(9) {TileNode.new} }, difficulty = "normal")
     @grid = grid
     @difficulty = difficulty
-    create_tiles_and_bombs
+    create_bombs
   end
 
   def [](pos) #[1,0]
@@ -22,25 +22,33 @@ class Board
     @grid[x][y] = value
   end
 
-  def create_tiles_and_bombs
+  def create_bombs
     bombs = num_of_bombs
 
     until bombs == 0
       0.upto(BOARD_SIZE - 1) do |x|
         0.upto(BOARD_SIZE - 1) do |y|
-          pos = [x, y]
-          new_tile = TileNode.new(pos, nil)
-          #debugger
-          if create_bomb?
-            new_tile.value = :b
-            bombs -= 1
+          pos = [x,y]
+          unless self[pos].value == :b
+            if create_bomb?
+              self[pos].value = :b
+              bombs = bombs - 1
+            end
           end
-
-          self[pos] = new_tile
         end
       end
     end
 
+    # until bombs <= 0
+    #   @grid.each do |row|
+    #     sample_tile = row.sample
+    #
+    #     unless sample_tile.value == :b
+    #       sample_tile.value = :b
+    #       bombs -= 1
+    #     end
+    #   end
+    # end
     nil
   end
 
@@ -61,8 +69,7 @@ end
 class TileNode
   attr_accessor :value
 
-  def initialize(pos, value)
-    @pos = pos
+  def initialize(value = nil)
     @value = value
   end
 end
