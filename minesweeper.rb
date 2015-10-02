@@ -8,6 +8,6 @@ if __FILE__ == $PROGRAM_NAME
   a.board.render
   #adjacent = a.board[[0,0]].adjacent_tiles(a.board)
   #adjacent.each { |x| print "#{x.position}\n"}
-  p a.reveal([0,0])
+  p a.board[[0,0]].reveal
   a.board.render
 end

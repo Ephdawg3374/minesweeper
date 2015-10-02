@@ -8,9 +8,9 @@ class Board
 
   def create_grid(difficulty)
     case difficulty
-    when :easy; Array.new(6) {Array.new(6) {TileNode.new}}
-    when :normal; Array.new(9) {Array.new(9) {TileNode.new}}
-    when :hard; Array.new(12) {Array.new(12) {TileNode.new}}
+    when :easy; Array.new(6) {Array.new(6) {TileNode.new(self)}}
+    when :normal; Array.new(9) {Array.new(9) {TileNode.new(self)}}
+    when :hard; Array.new(12) {Array.new(12) {TileNode.new(self)}}
     end
   end
 

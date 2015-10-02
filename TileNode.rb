@@ -11,13 +11,15 @@ class TileNode
     [ 1, 1]
   ]
 
-  attr_accessor :value, :parent, :children, :position
+  attr_accessor :value, :position
+  attr_reader :parent, :children, :board
 
-  def initialize(value = " ", position = [])
+  def initialize(board, position = [])
     @parent = nil
     @children = []
-    @value = value
+    @value = " "
     @position = position
+    @board = board
   end
 
   def parent=(node)
@@ -30,30 +32,22 @@ class TileNode
     self
   end
 
-  def dfs(target_value)
-    return self if self.value == target_value
+  def reveal
 
-    self.children.each do |child|
-      value = child.dfs(target_value)
-      return value unless value.nil?
+    adjacent = self.adjacent_tiles(board)
+    num_of_bombs = 0
+    adjacent.each { |tile| num_of_bombs += 1 if tile.value == :b }
+
+    # check if there are any adjacent bombs
+    if adjacent.any? {|tile| tile.value == :b}
+      self.value = num_of_bombs
+      return
     end
 
-    nil
-  end
+    # there are no adjacent bombs
+    self.value = :_
 
-  def bfs(target_value)
-    queue = [self]
-
-    until queue.empty?
-      compare = queue.shift
-      if compare.value == target_value
-        return compare
-      else
-        queue += compare.children
-      end
-    end
-
-    nil
+    adjacent.each { |node| node.reveal unless node.revealed? }
   end
 
   def bombed?
@@ -71,9 +65,7 @@ class TileNode
 
   def adjacent_tiles(board)
     positions = []
-
     curr_x, curr_y = position
-
     POSSIBLE_DIRECTIONS.each do |x, y|
       new_pos = [curr_x + x, curr_y + y]
 
@@ -83,8 +75,7 @@ class TileNode
     end
 
     neighbors = []
-    p "recursion set"
-    p positions
+
     positions.each { |pos| neighbors << board[pos] }
     neighbors
   end
