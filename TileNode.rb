@@ -12,24 +12,18 @@ class TileNode
   ]
 
   attr_accessor :value, :position
-  attr_reader :parent, :children, :board
+  attr_reader :parent, :children, :board, :flagged
 
   def initialize(board, position = [])
-    @parent = nil
-    @children = []
     @value = " "
     @position = position
     @board = board
+    @flagged = false
   end
 
-  def parent=(node)
-    return if node.children.include?(self) unless node.nil?
-
-    parent.children.delete(self) unless parent.nil?
-    @parent = node
-    parent.children << self unless node.nil?
-
-    self
+  def display
+    return value unless value == :b
+    " "
   end
 
   def reveal
@@ -47,15 +41,19 @@ class TileNode
     # there are no adjacent bombs
     self.value = :_
 
-    adjacent.each { |node| node.reveal unless node.revealed? }
+    adjacent.each { |node| node.reveal unless node.revealed? || node.flagged? }
   end
 
   def bombed?
     self.value == :b
   end
 
+  def flag
+    flagged == true ? flagged = false : flagged = true
+  end
+
   def flagged?
-    self.value == :f
+    flagged
   end
 
   def revealed?

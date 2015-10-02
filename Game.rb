@@ -5,25 +5,41 @@ class Game
     @board = board
   end
 
-
-
   def play
-    user_input = gets.chomp
-    validate_user_input(user_input)
-    pos = parse(user_input)
+    until game_over?
+      board.render
 
-    tile_node = board[pos]
-    value = board[pos].value
+      user_input = ""
 
-    if value == :b
-      game_over
-    else
-      reveal(tile_node)
+      loop do
+        puts "Enter coordinates"
+        user_input = gets.chomp
+        break if valid_user_input?(user_input)
+      end
+
+      pos = parse(user_input)
+      p pos
+      if board[pos].value == :b
+        board.render_loser
+        puts "game over son"
+        return
+      else
+        board[pos].reveal
+        #board.render
+      end
     end
   end
 
-  def game_over
-    puts "Game Over"
+  def valid_user_input?(user_input)
+    !(user_input =~ /\d+,\s*\d+/).nil?
+  end
+
+  def parse(user_input)
+    user_input.split(',').map(&:to_i)
+  end
+
+  def game_over?
+
   end
 
 end

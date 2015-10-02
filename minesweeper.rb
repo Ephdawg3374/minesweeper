@@ -5,9 +5,5 @@ require_relative 'board'
 
 if __FILE__ == $PROGRAM_NAME
   a = Game.new
-  a.board.render
-  #adjacent = a.board[[0,0]].adjacent_tiles(a.board)
-  #adjacent.each { |x| print "#{x.position}\n"}
-  p a.board[[0,0]].reveal
-  a.board.render
+  a.play
 end

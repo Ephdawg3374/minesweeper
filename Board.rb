@@ -3,6 +3,7 @@ class Board
 
   def initialize(difficulty = :normal)
     @grid = create_grid(difficulty)
+
     create_bombs
   end
 
@@ -52,11 +53,9 @@ class Board
     rand(1..3) == 1 ? true : false
   end
 
-
   def num_of_bombs
-    num_of_bombs = (@grid.length*@grid.length) / 3 # 1/3 of board are bombs
+    (@grid.length*@grid.length) / 3
   end
-
   def render
     @grid.each_index do |x|
       @grid[x].each_index do |y|
@@ -70,5 +69,25 @@ class Board
     end
     nil
   end
+
+  def render_loser
+    puts ":("
+  end
+
+  def won?
+    all_revealed = self.grid.all? do |row|
+      row.all? { |tile| tile.revealed?}
+    end
+
+    all_revealed && (num_of_flags == num_of_bombs)
+
+  end
+
+  def num_of_flags
+    self.grid.all? do |row|
+      row.find_all { |tile| tile.flagged? }
+    end.count
+  end
+
 
 end
