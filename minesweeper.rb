@@ -5,7 +5,7 @@ class Board
 
   BOARD_SIZE = 9
 
-  def initialize(grid = Array.new(9) {Array.new(9) {TileNode.new} }, difficulty = "normal")
+  def initialize(grid = Array.new(9) {Array.new(9) {TileNode.new} }, difficulty = :normal)
     @grid = grid
     @difficulty = difficulty
     create_bombs
@@ -25,30 +25,20 @@ class Board
   def create_bombs
     bombs = num_of_bombs
 
-    until bombs == 0
-      0.upto(BOARD_SIZE - 1) do |x|
-        0.upto(BOARD_SIZE - 1) do |y|
-          pos = [x,y]
-          unless self[pos].value == :b
-            if create_bomb?
-              self[pos].value = :b
-              bombs = bombs - 1
-            end
+    0.upto(BOARD_SIZE - 1) do |x|
+      0.upto(BOARD_SIZE - 1) do |y|
+        pos = [x,y]
+
+        unless self[pos].value == :b
+          if create_bomb?
+            self[pos].value = :b
+            bombs = bombs - 1
+            return nil if bombs == 0
           end
         end
       end
     end
-
-    # until bombs <= 0
-    #   @grid.each do |row|
-    #     sample_tile = row.sample
-    #
-    #     unless sample_tile.value == :b
-    #       sample_tile.value = :b
-    #       bombs -= 1
-    #     end
-    #   end
-    # end
+    
     nil
   end
 
@@ -59,10 +49,10 @@ class Board
 
   def num_of_bombs
     case @difficulty
-    when "normal"
+    when :normal
       num_of_bombs = (@grid.length*@grid.length) / 3 # 1/3 of board are bombs
     end
-    num_of_bombs
+     num_of_bombs
   end
 end
 
@@ -72,6 +62,7 @@ class TileNode
   def initialize(value = nil)
     @value = value
   end
+
 end
 
 class Game
