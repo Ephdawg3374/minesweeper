@@ -3,7 +3,7 @@ class Board
 
   def initialize(difficulty = :normal)
     @grid = create_grid(difficulty)
-
+    assign_position_to_tile_nodes
     create_bombs
   end
 
@@ -13,6 +13,16 @@ class Board
     when :normal; Array.new(9) {Array.new(9) {TileNode.new(self)}}
     when :hard; Array.new(12) {Array.new(12) {TileNode.new(self)}}
     end
+  end
+
+  def assign_position_to_tile_nodes
+    @grid.each_index do |x|
+      @grid[x].each_index do |y|
+        pos = [x,y]
+        self[pos].position = pos
+      end
+    end
+    nil
   end
 
   def [](pos) #[1,0]
@@ -32,9 +42,6 @@ class Board
     @grid.each_index do |x|
       @grid[x].each_index do |y|
         pos = [x,y]
-
-        #might need to look at this
-        self[pos].position = pos
 
         unless self[pos].value == :b
           if create_bomb?
@@ -61,9 +68,9 @@ class Board
       @grid[x].each_index do |y|
         pos = [x,y]
         if y == @grid.length - 1
-          print "[#{self[pos].value}]\n"
+          print "[#{self[pos].display}]\n"
         else
-          print "[#{self[pos].value}]"
+          print "[#{self[pos].display}]"
         end
       end
     end

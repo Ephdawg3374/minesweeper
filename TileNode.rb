@@ -63,18 +63,21 @@ class TileNode
 
   def adjacent_tiles(board)
     positions = []
+
     curr_x, curr_y = position
     POSSIBLE_DIRECTIONS.each do |x, y|
       new_pos = [curr_x + x, curr_y + y]
 
-      if new_pos.all? {|p| p.between?(0,9)}
+      if new_pos.all? {|p| p.between?(0, board.grid.length - 1)}
        positions << new_pos
      end
     end
 
     neighbors = []
+    ### ISSUES ###
 
     positions.each { |pos| neighbors << board[pos] }
+
     neighbors
   end
 
