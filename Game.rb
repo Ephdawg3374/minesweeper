@@ -11,13 +11,17 @@ class Game
     num_of_bombs = 0
     adjacent.each { |tile| num_of_bombs += 1 if tile.value == :b }
 
-    # base case returns an integer
-    return num_of_bombs if adjacent.any? {|tile| tile.value == :b}
+    # check if there are any adjacent bombs
+    if adjacent.any? {|tile| tile.value == :b}
+      current_node.value = num_of_bombs
+      return
+    end
 
+    # there are no adjacent bombs
     #if adjacent.all? { |tile| tile.value != :b } # no adjacent bombs
-    current_node.display = :_
+    current_node.value = :_
 
-    adjacent.each { |node| reveal(node.position) }
+    adjacent.each { |node| reveal(node.position) unless node.revealed? }
   end
 
   def play

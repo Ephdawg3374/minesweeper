@@ -5,7 +5,6 @@ class TileNode
     [-1, 0],
     [-1, 1],
     [ 0,-1],
-    [ 0, 0],
     [ 0, 1],
     [ 1,-1],
     [ 1, 0],
@@ -67,7 +66,7 @@ class TileNode
 
   def revealed?
     tile_is = self.value
-    tile_is == :_ || tile_is.is_a?(Interger) || tile_is.flagged?
+    tile_is !=  " "
   end
 
   def adjacent_tiles(board)
@@ -84,6 +83,8 @@ class TileNode
     end
 
     neighbors = []
+    p "recursion set"
+    p positions
     positions.each { |pos| neighbors << board[pos] }
     neighbors
   end
