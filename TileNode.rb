@@ -70,15 +70,22 @@ class TileNode
     tile_is == :_ || tile_is.is_a?(Interger) || tile_is.flagged?
   end
 
-  def adjacent_tiles(pos)
-    possible_moves = []
+  def adjacent_tiles(board)
+    positions = []
 
-    curr_x, curr_y = pos
+    curr_x, curr_y = position
 
-    # POSSIBLE_DIRECTIONS.each do |x, y|
-    #   new_pos = [curr_x + x, curr_y + y]
-    #
-    #   if new_pos.all? {|p| p.between?(0..)}
+    POSSIBLE_DIRECTIONS.each do |x, y|
+      new_pos = [curr_x + x, curr_y + y]
+
+      if new_pos.all? {|p| p.between?(0,9)}
+       positions << new_pos
+     end
+    end
+
+    neighbors = []
+    positions.each { |pos| neighbors << board[pos] }
+    neighbors
   end
 
 end
